@@ -28,32 +28,49 @@ public class StudentController {
     private FacultyService facultyService;
 
     @GetMapping({"", "/"})
-    public String getAll() {
+    public String getAll(ModelMap model) {
         System.out.println("------ StudentController getAll() ------");
         
+        // List<StudentEntity> students = studentService.getStudentAll();
+        // System.out.println("----- StudentController getAll() Result -----");
+        // System.out.println("Size: " + students.size());
+
+        List<FacultyEntity> faculties = facultyService.getFacultyAll();
+        model.addAttribute("faculties", faculties);
+
         List<StudentEntity> students = studentService.getStudentAll();
-        System.out.println("----- StudentController getAll() Result -----");
-        System.out.println("Size: " + students.size());
-        
-        return "index";
+        model.addAttribute("students", students);
+
+        return "student/index";
     }
 
     @GetMapping("/{student-id}")
     public String getById(
+        ModelMap model,
         @PathVariable(name = "student-id") Integer studentId
     ) {
         System.out.println("------ StudentController getById() ------");
         System.out.println("student-id: " + studentId);
 
+        // StudentEntity entity = studentService.getStudentById(studentId);
+        // System.out.println("----- StudentController getById() Result -----");
+        // System.out.println("Student First Name:  "+ entity.getStudentFirstName());
+        // System.out.println("Student Last Name: " + entity.getStudentLastName());
         StudentEntity entity = studentService.getStudentById(studentId);
-        System.out.println("----- StudentController getById() Result -----");
-        System.out.println("Student First Name:  "+ entity.getStudentFirstName());
-        System.out.println("Student Last Name: " + entity.getStudentLastName());
-        return "index";
+        model.addAttribute("student", entity);
+
+        List<FacultyEntity> faculties = facultyService.getFacultyAll();
+        model.addAttribute("faculties", faculties);
+
+        List<StudentEntity> students = studentService.getStudentAll();
+        model.addAttribute("students", students);
+
+        return "student/index";
     }
 
     @GetMapping("/delete/{student-id}")
     public String getDeleteById(
+        ModelMap model,
         @PathVariable(name = "student-id") Integer studentId
     ) {
         System.out.println("------ StudentController getDeleteById() ------");
@@ -61,7 +78,14 @@ public class StudentController {
 
         System.out.println("------ StudentController getDeleteById() Result ------");
         studentService.deleteStudentById(studentId);
-        return "index";
+
+        List<FacultyEntity> faculties = facultyService.getFacultyAll();
+        model.addAttribute("faculties", faculties);
+
+        List<StudentEntity> students = studentService.getStudentAll();
+        model.addAttribute("students", students);
+
+        return "student/index";
     }
 
     @PostMapping("/")
@@ -94,7 +118,13 @@ public class StudentController {
         System.out.println("Student First Name: " + result.getStudentFirstName());
         System.out.println("Student Last Name: " + result.getStudentLastName());
 
-        return "index";
+        List<FacultyEntity> faculties = facultyService.getFacultyAll();
+        model.addAttribute("faculties", faculties);
+
+        List<StudentEntity> students = studentService.getStudentAll();
+        model.addAttribute("students", students);
+
+        return "student/index";
     }
 
 }

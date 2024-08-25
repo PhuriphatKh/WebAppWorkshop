@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="~{template::head}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{template::menu('course')}"></th:block>
+    <th:block th:replace="~{template::content-begin}"></th:block>
+    Course
+    <form th:action="@{/course/}" method="post">
+        <div class="my-2">
+            <label class="w-40 inline-block">Course Id:</label>
+            <input type="text" name="course-id"
+                class="border border-blue-600 p-1 rounded w-80"
+                th:value="${course?.courseId?:'0'}" readonly
+            />
+        </div>
+        <div class="my-2">
+            <label class="w-40 inline-block">Course Name:</label>
+            <input type="text" name="course-name"
+                class="border border-blue-600 p-1 rounded w-80"
+                th:value="${course?.courseName?:''}"
+            />
+        </div>
+        <div class="my-2">
+            <label class="w-40 inline-block">Course Description:</label>
+            <input type="text" name="course-desc"
+                class="border border-blue-600 p-1 rounded w-80"
+                th:value="${course?.courseDescription?:''}"
+            />
+        </div>
+        <div class="ny-2 text-right">
+            <button type="submit"
+                class="text-white font-bold bg-blue-600 py-2 px-4 rounded">
+                Save Course
+            </button>
+        </div>
+    </form>
+
+    <table class="w-full">
+        <thead>
+            <tr class="text-center">
+                <td class="w-[10%]">#</td>
+                <td class="w-[10%]">Course Id</td>
+                <td class="w-[30%]">Course Name</td>
+                <td class="w-[30%]">Course Description</td>
+                <td class="w-[20%]">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="course, iterStat : ${courses}">
+                <td th:text="${iterStat.count}" class="text-center"></td>
+                <td th:text="${course.courseId}" class="text-center"></td>
+                <td th:text="${course.courseName}" class="text-center"></td>
+                <td th:text="${course.courseDescription}" class="text-center"></td>
+                <td class="text-center">
+                    <a th:href="@{/course/{id}(id=${course.courseId})}">
+                        Edit
+                    </a>
+                    <a th:href="@{/course/delete/{id}(id=${course.courseId})}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <th:block th:replace="~{template::content-end}"></th:block>
+</body>
+</html>

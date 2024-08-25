@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="~{template::head}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{template::menu('student')}"></th:block>
+    <th:block th:replace="~{template::content-begin}"></th:block>
+    Student
+    <form th:action="@{/student/}" method="post">
+        <div class="grid grid-cols-2">
+            <div>
+                <label class="w-40 inline-block">Student Id: </label>
+                <input type="text" name="student-id"
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${student?.studentId?:'0'}" readonly
+                />
+            </div>
+            <div>
+                <label class="w-40 inline-block">Student Code: </label>
+                <input type="text" name="student-code"
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${student?.studentCode?:''}"
+                />
+            </div>
+        </div>
+        <div class="my-2 grid grid-cols-2">
+            <div>
+                <label class="w-40 inline-block">Student First Name</label>
+                <input type="text" name="student-fname"
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${student?.studentFirstName?:''}"
+                    />
+            </div>
+            <div>
+                <label class="w-40 inline-block">Student Last Name</label>
+                <input type="text" name="student-lname"
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${student?.studentLastName?:''}"
+                    />
+            </div>
+        </div>
+        <div class="my-2 grid grid-cols-2">
+            <div>
+                <label class="w-40 inline-block">Faculty</label>
+                <select name="faculty-id" 
+                    class="border border-blue-600 p-1 rounded w-80">
+                    <option value="0">Select Faculty</option>
+                    <th:block th:if="${student?.faculty != null}">
+                        <option th:each="faculty : ${faculties}"
+                            th:value="${faculty.facultyId}"
+                            th:text="${faculty.facultyName}"
+                            th:selected="${student.faculty.facultyId == faculty.facultyId}"
+                        ></option>
+                    </th:block>
+                    <th:block th:unless="${student?.faculty != null}">
+                        <option th:each="faculty : ${faculties}"
+                            th:value="${faculty.facultyId}"
+                            th:text="${faculty.facultyName}"
+                        ></option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <div class="my-2 text-right">
+            <button type="submit"
+                class="text-white font-bold bg-blue-600 py-2 px-4 rounded">
+                Save Student
+            </button>
+        </div>        
+    </form>
+    <table class="w-full">
+        <thead>
+            <tr class="text-center">
+                <td class="w-[10%]">#</td>
+                <td class="w-[10%]">Student ID</td>
+                <td class="w-[10%]">Student Code</td>
+                <td class="w-[20%]">Student First Name</td>
+                <td class="w-[20%]">Student Last Name</td>
+                <td class="w-[20%]">Faculty Name</td>
+                <td class="w-[10%]">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="student, iterStat : ${students}">
+                <td th:text="${iterStat.count}" class="text-center"></td>
+                <td th:text="${student.studentId}" class="text-center"></td>
+                <td th:text="${student.studentCode}"></td>
+                <td th:text="${student.studentFirstName}"></td>
+                <td th:text="${student.studentLastName}"></td>
+                <td th:text="${student?.faculty?.facultyName?:''}"></td>
+                <td class="text-center">
+                    <a th:href="@{/student/{id}(id=${student.studentId})}">
+                        Edit
+                    </a>
+                    <a th:href="@{/student/delete/{id}(id=${student.studentId})}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <th:block th:replace="~{template::content-end}"></th:block>
+</body>
+</html>

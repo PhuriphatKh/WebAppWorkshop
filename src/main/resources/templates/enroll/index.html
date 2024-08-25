@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="~{template::head}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{template::menu('enroll')}"></th:block>
+    <th:block th:replace="~{template::content-begin}"></th:block>
+    Enroll
+    <form th:action="@{/enroll/}" method="post">
+        <div class="grid grid-cols-2">
+            <div>
+                <label class="w-40 inline-block">Enroll Id</label>
+                <input type="text" name="enroll-id"
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${enroll?.enrollId?:'0'}" readonly
+                />
+            </div>
+        </div>
+        <div class="my-2 grid grid-cols-2">
+            <div>
+                <label class="w-40 inline-block">Student</label>
+                <input type="hidden" name="student-id"
+                    th:value="${student?.studentId?:''}" 
+                /> 
+                <input type="text" name="student-name" readonly
+                    class="border border-blue-600 p-1 rounded w-80"
+                    th:value="${student?.studentCode?:''}" 
+                />
+            </div>
+            <div>
+                <label class="w-40 inline-block">Course</label>
+                <select name="course-id"
+                    class="border border-blue-600 p-1 rounded w-80">
+                    <option th:each="course : ${courses}"
+                        th:value="${course.courseId}"
+                        th:text="${course.courseName}"
+                    ></option>
+                </select>
+            </div>
+        </div>
+        <div class="my-2 text-right">
+            <button type="submit" th:disabled="${student == null}"
+                class="text-white font-bold bg-blue-600 py-2 px-4 rounded">
+                Enroll
+            </button>
+        </div>
+    </form>
+
+    Student List
+    <table class="w-full">
+        <thead>
+            <tr class="text-center">
+                <td class="w-[10%]">#</td>
+                <td class="w-[10%]">Student ID</td>
+                <td class="w-[10%]">Student Code</td>
+                <td class="w-[20%]">Student First Name</td>
+                <td class="w-[20%]">Student Last Name</td>
+                <td class="w-[20%]">Faculty Name</td>
+                <td class="w-[10%]">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="student, iterStat : ${students}">
+                <td th:text="${iterStat.count}" class="text-center"></td>
+                <td th:text="${student.studentId}" class="text-center"></td>
+                <td th:text="${student.studentCode}" class="text-center"></td>
+                <td th:text="${student.studentFirstName}" class="text-center"></td>
+                <td th:text="${student.studentLastName}" class="text-center"></td>
+                <td th:text="${student?.faculty?.facultyName?:''}" class="text-center"></td>
+                <td class="text-center">
+                    <a th:href="@{/enroll/{id}(id=${student.studentId})}">
+                        View Course
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr class="my-4">
+
+    Enrollment
+    <table class="w-full">
+        <thead>
+            <tr class="text-center">
+                <td class="w-[10%]">#</td>
+                <td class="w-[70%]">Course Name</td>
+                <td class="w-[20%]">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="enroll, iterStat : ${enrolls}">
+                <td th:text="${iterStat.count}" class="text-center"></td>
+                <td th:text="${enroll.course.courseName}" class="text-center"></td>
+                <td class="text-center">
+                    <a th:href="@{/enroll/delete/{id}(id=${enroll.enrollId})}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <th:block th:replace="~{template::content-end}"></th:block>
+</body>
+</html>

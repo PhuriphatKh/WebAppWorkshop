@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:replace="~{template :: head}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{template :: menu('faculty')}"></th:block>
+    <th:block th:replace="~{template :: content-begin}"></th:block>
+    Faculty
+    <form th:action="@{/faculty/}" method="post">
+        <div class="my-2">
+            <label class="w-32 inline-block">Faculty Id</label>
+            <input type="text" name="faculty-id"
+                class="border border-blue-600 p-1 rounded w-80"
+                th:value="${faculty?.facultyId?:'0'}" readonly
+            />
+        </div>
+        <div class="my-2">
+            <label class="w-32 inline-block">Faculty Name</label>
+            <input type="text" name="faculty-name"
+                class="border border-blue-600 p-1 rounded w-80"
+                th:value="${faculty?.facultyName?:''}"
+            />
+        </div>
+        <div class="my-2 text-right">
+            <button type="submit"
+                class="text-white font-bold bg-blue-600 py-2 px-4 rounded">
+                Save Faculty
+            </button>
+        </div>
+    </form>
+
+    <table class="w-full">
+        <thead>
+            <tr class="text-center">
+                <td class="w-[10%]">#</td>
+                <td class="w-[10%]">Faculty Id</td>
+                <td class="w-[60%]">Faculty Name</td>
+                <td class="w-[20%]">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="faculty, iterStat : ${faculties}">
+                <td th:text="${iterStat.count}" class="text-center"></td>
+                <td th:text="${faculty.facultyId}" class="text-center"></td>
+                <td th:text="${faculty.facultyName}"></td>
+                <td class="text-center">
+                    <a th:href="@{/faculty/{id}(id=${faculty.facultyId})}">
+                        Edit
+                    </a>
+                    <a th:href="@{/faculty/delete/{id}(id=${faculty.facultyId})}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <th:block th:replace="~{template :: content-end}"></th:block>
+</body>
+</html>
